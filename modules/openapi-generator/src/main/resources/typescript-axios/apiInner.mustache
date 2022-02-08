@@ -252,16 +252,30 @@ export const {{classname}}Factory = function (configuration?: Configuration, bas
          {{#summary}}
          * @summary {{&summary}}
          {{/summary}}
+         {{#useSingleRequestParameter}}
+         {{#allParams.0}}
+         * @param {{=<% %>=}}{<%& classname %><%& operationIdCamelCase %>RequestParameters}<%={{ }}=%> requestParameters Request parameters.
+         {{/allParams.0}}
+         {{/useSingleRequestParameter}}
+         {{^useSingleRequestParameter}}
          {{#allParams}}
          * @param {{=<% %>=}}{<%&dataType%>}<%={{ }}=%> {{^required}}[{{/required}}{{paramName}}{{^required}}]{{/required}} {{description}}
          {{/allParams}}
+         {{/useSingleRequestParameter}}
          * @param {*} [options] Override http request option.{{#isDeprecated}}
          * @deprecated{{/isDeprecated}}
          * @throws {RequiredError}
          */
+        {{#useSingleRequestParameter}}
+        {{nickname}}({{#allParams.0}}requestParameters: {{classname}}{{operationIdCamelCase}}RequestParameters{{^hasRequiredParams}}{{/hasRequiredParams}}, {{/allParams.0}}options?: AxiosRequestConfig) {
+            return localVarFp.{{nickname}}({{#allParams.0}}{{#allParams}}requestParameters.{{paramName}}, {{/allParams}}{{/allParams.0}}options).then((request) => request(this.axios, this.basePath));
+        },
+        {{/useSingleRequestParameter}}
+         {{^useSingleRequestParameter}}
         {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}options?: any): AxiosPromise<{{{returnType}}}{{^returnType}}void{{/returnType}}> {
             return localVarFp.{{nickname}}({{#allParams}}{{paramName}}, {{/allParams}}options).then((request) => request(axios, basePath));
         },
+        {{/useSingleRequestParameter}}
     {{/operation}}
     };
 };
@@ -280,15 +294,27 @@ export interface {{classname}}Interface {
      {{#summary}}
      * @summary {{&summary}}
      {{/summary}}
+     {{#useSingleRequestParameter}}
+     {{#allParams.0}}
+     * @param {{=<% %>=}}{<%& classname %><%& operationIdCamelCase %>RequestParameters}<%={{ }}=%> requestParameters Request parameters.
+     {{/allParams.0}}
+     {{/useSingleRequestParameter}}
+    {{^useSingleRequestParameter}}
      {{#allParams}}
      * @param {{=<% %>=}}{<%&dataType%>}<%={{ }}=%> {{^required}}[{{/required}}{{paramName}}{{^required}}]{{/required}} {{description}}
      {{/allParams}}
+    {{/useSingleRequestParameter}}
      * @param {*} [options] Override http request option.{{#isDeprecated}}
      * @deprecated{{/isDeprecated}}
      * @throws {RequiredError}
      * @memberof {{classname}}Interface
      */
+    {{#useSingleRequestParameter}}
+    {{nickname}}({{#allParams.0}}requestParameters: {{classname}}{{operationIdCamelCase}}RequestParameters{{^hasRequiredParams}}{{/hasRequiredParams}}, {{/allParams.0}}options?: AxiosRequestConfig)
+    {{/useSingleRequestParameter}}
+    {{^useSingleRequestParameter}}
     {{nickname}}({{#allParams}}{{paramName}}{{^required}}?{{/required}}: {{{dataType}}}, {{/allParams}}options?: AxiosRequestConfig): AxiosPromise<{{{returnType}}}{{^returnType}}void{{/returnType}}>;
+    {{/useSingleRequestParameter}}
 
 {{/operation}}
 }
@@ -300,9 +326,9 @@ export interface {{classname}}Interface {
 /**
  * Request parameters for {{nickname}} operation in {{classname}}.
  * @export
- * @interface {{classname}}{{operationIdCamelCase}}Request
+ * @interface {{classname}}{{operationIdCamelCase}}RequestParameters
  */
-export interface {{classname}}{{operationIdCamelCase}}Request {
+export interface {{classname}}{{operationIdCamelCase}}RequestParameters {
     {{#allParams}}
     /**
      * {{description}}
@@ -340,7 +366,7 @@ export class {{classname}} extends BaseAPI {
      {{/summary}}
      {{#useSingleRequestParameter}}
      {{#allParams.0}}
-     * @param {{=<% %>=}}{<%& classname %><%& operationIdCamelCase %>Request}<%={{ }}=%> requestParameters Request parameters.
+     * @param {{=<% %>=}}{<%& classname %><%& operationIdCamelCase %>RequestParameters}<%={{ }}=%> requestParameters Request parameters.
      {{/allParams.0}}
      {{/useSingleRequestParameter}}
      {{^useSingleRequestParameter}}
@@ -354,7 +380,7 @@ export class {{classname}} extends BaseAPI {
      * @memberof {{classname}}
      */
     {{#useSingleRequestParameter}}
-    public {{nickname}}({{#allParams.0}}requestParameters: {{classname}}{{operationIdCamelCase}}Request{{^hasRequiredParams}} = {}{{/hasRequiredParams}}, {{/allParams.0}}options?: AxiosRequestConfig) {
+    public {{nickname}}({{#allParams.0}}requestParameters: {{classname}}{{operationIdCamelCase}}RequestParameters{{^hasRequiredParams}} = {}{{/hasRequiredParams}}, {{/allParams.0}}options?: AxiosRequestConfig) {
         return {{classname}}Fp(this.configuration).{{nickname}}({{#allParams.0}}{{#allParams}}requestParameters.{{paramName}}, {{/allParams}}{{/allParams.0}}options).then((request) => request(this.axios, this.basePath));
     }
     {{/useSingleRequestParameter}}
